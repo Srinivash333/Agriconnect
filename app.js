@@ -14,6 +14,22 @@ app.use(express.static(path.join(__dirname,"public")));
 app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"views"));
 
+//Routes
+const authRoutes = require("./routes/auth.routes");
+app.use("/", authRoutes);
+
+
+app.get("/farmer/dashboard", (req, res) => {
+  res.send("Farmer Dashboard");
+});
+
+app.get("/worker/dashboard", (req, res) => {
+  res.send("Worker Dashboard");
+});
+
+
+
+
 //Test route
 app.get("/",(req,res)=>{
     res.send("Agriconnect server is Running");
