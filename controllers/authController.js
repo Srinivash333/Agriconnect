@@ -1,33 +1,54 @@
-const users=[];
+const db = require("../config/db");
 
-exports.showSignup=(req,res)=>{
-    res.render("auth/signup");
+// Show Signup Page
+exports.showSignup = (req, res) => {
+  res.render("auth/signup");
 };
 
-exports.showLogin=(req,res)=>{
-    res.render("auth/login");
+// Show Login Page
+exports.showLogin = (req, res) => {
+  res.render("auth/login");
 };
 
-exports.signUser=(req,res)=>{
-    const {name,email,password,role}=req.body;
-    const user={name,email,password,role};
-    users.push(user);
-    res.send("Signup successful! Go to login.");      
-}
+// SIGNUP (Store in MySQL)
+exports.signupUser = (req, res) => {
+  const { name, email, password, role } = req.body;
 
-exports.loginUser=(req,res)=>{
-    const {email,password}=req.body;
-    const user=users.find(u=>u.email===email && u.password===password);
+  const sql = "INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)";
 
-    if(!user){
-        return res.send("Invalid credentials. Please try again.");
+  db.query(sql, [name, email, password, role], (err, result) => {
+    if (err) {
+      console.log(err);
+      return res.send("Error in signup");
     }
 
-    //Role System
-    if(user.role==="farmer"){
-        res.redirect("/farmer/dashboard");
+    res.send("Signup successful! Go to login.");
+  });
+};
+
+// LOGIN (Check from MySQL)
+exports.loginUser = (req, res) => {
+  const { email, password } = req.body;
+
+  const sql = "SELECT * FROM users WHERE email = ? AND password = ?";
+
+  db.query(sql, [email, password], (err, results) => {
+    if (err) {
+      console.log(err);
+      return res.send("Error in login");
     }
-    else if(user.role==="admin"){
-        res.redirect("/admin/dashboard");
-    } 
-}; 
+
+    if (results.length === 0) {
+      return res.send("Invalid credentials. Please try again.");
+    }
+
+    const user = results[0];
+
+    // Role System
+    if (user.role === "farmer") {
+      res.redirect("/farmer/dashboard");
+    } else {
+      res.redirect("/worker/dashboard");
+    }
+  });
+};

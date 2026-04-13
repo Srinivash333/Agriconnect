@@ -18,11 +18,13 @@ app.set("views",path.join(__dirname,"views"));
 const authRoutes = require("./routes/auth.routes");
 app.use("/", authRoutes);
 
-
+//Farmer Dashboard
 app.get("/farmer/dashboard", (req, res) => {
-  res.send("Farmer Dashboard");
+  res.render("farmer/dashboard");
 });
 
+
+//Worker Dashboard
 app.get("/worker/dashboard", (req, res) => {
   res.send("Worker Dashboard");
 });
