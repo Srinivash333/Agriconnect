@@ -26,7 +26,11 @@ app.get("/farmer/dashboard", (req, res) => {
 
 //Worker Dashboard
 app.get("/worker/dashboard", (req, res) => {
-  res.send("Worker Dashboard");
+  res.render("worker/dashboard");
+});
+
+app.get("/jobs", (req, res) => {
+  res.render("worker/jobs");
 });
 
 
