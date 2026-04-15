@@ -2,6 +2,7 @@ const express=require("express");
 const path=require("path");
 
 const app=express();
+const jobController = require("./controllers/jobController");
 
 //middleeware
 app.use(express.json());
@@ -22,6 +23,16 @@ app.use("/", authRoutes);
 app.get("/farmer/dashboard", (req, res) => {
   res.render("farmer/dashboard");
 });
+
+
+// Show Post Job Form
+app.get("/post-job", (req, res) => {
+  res.render("farmer/post-job");
+});
+
+
+
+app.post("/post-job", jobController.createJob);
 
 
 //Worker Dashboard
