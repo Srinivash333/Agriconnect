@@ -44,7 +44,7 @@ exports.loginUser = (req, res) => {
 
     const user = results[0];
 
-    // Role System
+    // Role-based redirect
     if (user.role === "farmer") {
       res.redirect("/farmer/dashboard");
     } else {
@@ -52,3 +52,36 @@ exports.loginUser = (req, res) => {
     }
   });
 };
+
+// TOGGLE AVAILABILITY
+exports.toggleAvailability = (req, res) => {
+  // Temporary: fixed user id (later use session)
+  const userId = 1;
+
+  const sql = "UPDATE users SET availability = NOT availability WHERE id = ?";
+
+  db.query(sql, [userId], (err, result) => {
+    if (err) {
+      console.log(err);
+      return res.send("Error updating availability");
+    }
+
+    res.redirect("/worker/dashboard");
+  });
+};
+
+// GET AVAILABLE WORKERS (for Farmer)
+exports.getAvailableWorkers = (req, res) => {
+  const sql = "SELECT * FROM users WHERE role = 'worker' AND availability = TRUE";
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.log(err);
+      return res.send("Error fetching workers");
+    }
+
+    res.render("farmer/workers", { workers: results });
+  });
+};
+
+
