@@ -40,9 +40,8 @@ app.get("/worker/dashboard", (req, res) => {
   res.render("worker/dashboard");
 });
 
-app.get("/jobs", (req, res) => {
-  res.render("worker/jobs");
-});
+// ✅ FINAL JOBS ROUTE (Dynamic)
+app.get("/jobs", jobController.getJobs);
 
 
 

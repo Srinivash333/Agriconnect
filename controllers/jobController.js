@@ -1,5 +1,6 @@
 const db = require("../config/db");
 
+// Create Job (POST)
 exports.createJob = (req, res) => {
   const { title, description, wage_type, amount } = req.body;
 
@@ -11,6 +12,22 @@ exports.createJob = (req, res) => {
       return res.send("Error posting job");
     }
 
-    res.send("Job posted successfully!");
+    // 👉 Redirect after success (better UX)
+    res.redirect("/jobs");
+  });
+};
+
+
+// Get Jobs (GET)
+exports.getJobs = (req, res) => {
+  const sql = "SELECT * FROM jobs";
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.log(err);
+      return res.send("Error fetching jobs");
+    }
+
+    res.render("worker/jobs", { jobs: results });
   });
 };
