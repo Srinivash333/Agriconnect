@@ -20,7 +20,8 @@ exports.createJob = (req, res) => {
 
 // Get Jobs (GET)
 exports.getJobs = (req, res) => {
-  const sql = "SELECT * FROM jobs";
+  // Simple ML logic: prioritize daily jobs
+  const sql = "SELECT * FROM jobs ORDER BY wage_type = 'day' DESC";
 
   db.query(sql, (err, results) => {
     if (err) {
